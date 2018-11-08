@@ -1,0 +1,93 @@
+﻿@model HealthCheck.Mvc.Models.IndexPageModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Model.PageTitle</title>
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><i style="color: red;" class="fas fa-heartbeat"></i>&nbsp;&nbsp;@Model.PageTitle</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content" style="margin-top: 60px;">
+        <div class="row">
+            <div class="col-md-12">
+
+                @if (Model.TestResults.Count() == 0) {
+
+                <div style="width: 100%; text-align: center; padding: 10px; margin: 10px 0; color: white; background-color: black; font-weight: bold; font-size: 18px;">No tests found!</div>
+
+                } else {
+
+                var failedTests = Model.TestResults.Where(x => !x.Successful).ToList();
+                var passingTests = Model.TestResults.Where(x => x.Successful).ToList();
+
+                if (failedTests.Count() > 0) {
+                <div style="width: 100%; text-align: center; padding: 10px; margin: 10px 0; color: white; background-color: red; font-weight: bold; font-size: 18px;">One or more errors occurred during testing!</div>
+                }
+
+                if (failedTests.Count() > 0) {
+                <div>The following tests failed:</div>
+                <table>
+                    @foreach(var item in failedTests)
+                    {
+                    <tr>
+                        <td><i class="fas fa-exclamation-triangle" style="color: red;"></i></td>
+                        <td>@item.TestName</td>
+                        <td>(@item.ExecutionTime)</td>
+                        <td>@item.ErrorMessage</td>
+                    </tr>
+                    }
+                </table>
+                }
+
+                if (passingTests.Count() > 0) {
+                <div>The following tests completed without any errors:</div>
+                <table>
+                    @foreach(var item in passingTests)
+                    {
+                    <tr>
+                        <td><i class="fas fa-check" style="color: green;"></i></td>
+                        <td>@item.TestName</td>
+                        <td>(@item.ExecutionTime)</td>
+                    </tr>
+                    }
+                </table>
+                }
+
+                }
+
+            </div>
+        </div>
+
+        <hr />
+        <footer>
+            <p>
+                @Raw(Model.Footer)
+            </p>
+        </footer>
+    </div>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <style>
+        table {
+            margin: 10px 0;
+        }
+
+            table td {
+                padding: 4px 8px;
+            }
+    </style>
+
+</body>
+</html>
+
