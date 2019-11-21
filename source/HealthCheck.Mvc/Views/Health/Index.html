@@ -29,7 +29,11 @@
 
                 var failedTests = Model.TestResults.Where(x => !x.Successful).ToList();
                 var passingTests = Model.TestResults.Where(x => x.Successful).ToList();
-
+                
+                if (failedTests.Count() == 0) {
+                <div style="width: 100%; text-align: center; padding: 10px; margin: 10px 0; color: white; background-color: green; font-weight: bold; font-size: 18px;">All tests passed!</div>
+                }
+                
                 if (failedTests.Count() > 0) {
                 <div style="width: 100%; text-align: center; padding: 10px; margin: 10px 0; color: white; background-color: red; font-weight: bold; font-size: 18px;">One or more errors occurred during testing!</div>
                 }
